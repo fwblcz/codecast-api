@@ -43,6 +43,10 @@ class LessonsController extends ApiController
         ]);
     }
 
+
+    public function store(Request $request){
+        
+    }
 //    private function transform($lessons){
 //        return array_map(function($lesson){
 //            return [
