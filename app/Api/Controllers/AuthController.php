@@ -13,11 +13,11 @@ class AuthController extends BaseController{
     public function authenticate(Request $request)
     {
         // grab credentials from the request
-//        $credentials = $request->only('email', 'password');
-       $credentials = [
-            'user_email'=>$request->get('user_email'),
-            'password'=>$request->get('user_password')
-        ];
+        $credentials = $request->only('email', 'password');
+//       $credentials = [
+//            'user_email'=>$request->get('user_email'),
+//            'password'=>$request->get('user_password')
+//        ];
         try {
             // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
