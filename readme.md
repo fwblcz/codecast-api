@@ -68,3 +68,15 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
   postman
 
 - Postman是一款功能强大的网页调试与发送网页HTTP请求的Chrome插件
+
+composer.json 添加
+
+- "dingo/api": "2.0.0-alpha1",
+- "tymon/jwt-auth": "0.5.*"
+
+进行composer update 安装
+
+## 安装tymon/jwt-auth后 执行php artisan jwt:generate问题解决方案
+-Go to JWTGenerateCommand.php file located in vendor/tymon/src/Commands and paste this method
+
+ public function handle() { $this->fire(); }
