@@ -7,7 +7,7 @@ use App\Transformer\LessonTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class LessonsController extends Controller
+class LessonsController extends ApiController
 {
     //如果LessonTransformer中的方法没有被正确的引入  可以到命令行工具中执行composer dump-autoload  会把自动加载文件重新编译一遍
     //就可以找到Transformer、LessonTransformer两个类
@@ -24,7 +24,7 @@ class LessonsController extends Controller
         //直接展示我们的数据结构
         //没有错误信息
         $lessons=Lesson::all();
-        return Response::json([
+        return $this->response([
             'status'=>'success',
             'code'=>200,
             'data'=>$this->lessonTransformer->transformCollection($lessons->toArray())
@@ -32,8 +32,11 @@ class LessonsController extends Controller
     }
 
     public function show($id){
-        $lesson=Lesson::findOrFail($id);
-        return Response::json([
+        $lesson=Lesson::find($id);
+        if(!$lesson){
+            return $this->responseNotFound();
+        }
+        return $this->response([
             'status'=>'success',
             'code'=>200,
             'data'=>$this->lessonTransformer->transform($lesson)
