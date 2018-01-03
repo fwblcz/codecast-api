@@ -3,11 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Lesson;
+use App\Transformer\LessonTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class LessonsController extends Controller
 {
+    //如果LessonTransformer中的方法没有被正确的引入  可以到命令行工具中执行composer dump-autoload  会把自动加载文件重新编译一遍
+    //就可以找到Transformer、LessonTransformer两个类
+    protected $lessonTransformer;
+    public function __construct(LessonTransformer $lessonTransformer)
+    {
+        $this->lessonTransformer=$lessonTransformer;
+    }
+
     public function index(){
         //all()方法缺陷
         //数据多的时候查找慢
@@ -18,7 +27,7 @@ class LessonsController extends Controller
         return Response::json([
             'status'=>'success',
             'code'=>200,
-            'data'=>$this->transformCollection($lessons)
+            'data'=>$this->lessonTransformer->transformCollection($lessons->toArray())
         ]);
     }
 
@@ -27,7 +36,7 @@ class LessonsController extends Controller
         return Response::json([
             'status'=>'success',
             'code'=>200,
-            'data'=>$this->transform($lesson)
+            'data'=>$this->lessonTransformer->transform($lesson)
         ]);
     }
 
@@ -40,14 +49,5 @@ class LessonsController extends Controller
 //            ];
 //        },$lessons->toArray());
 //    }
-    private function transformCollection($lessons){
-        return array_map([$this,'transform'],$lessons->toArray());
-    }
-    private function transform($lesson){
-        return [
-            'title'=>$lesson['title'],
-            'content'=>$lesson['body'],
-            'is_free'=>(boolean)$lesson['free'],
-        ];
-    }
+
 }
