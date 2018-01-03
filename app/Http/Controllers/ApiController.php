@@ -22,7 +22,7 @@ class ApiController extends Controller
     public function responseNotFound($message='Not found'){
         return $this->setStatusCode(404)->responseError($message);
     }
-    private function responseError($message){
+    public function responseError($message){
         return $this->response([
             'status'=>'failed',
            'errors'=>[
